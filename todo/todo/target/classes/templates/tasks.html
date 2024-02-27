@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Lista de Tarefas</title>
+</head>
+
+<body>
+
+	<h2>Lista de Tarefas</h2>
+
+	<form th:action="@{/tasks}" method="post" th:object="${task}" class="form">
+		<label for="description">Descrição:</label>
+		<input type="text" id="description" name="description" th:field="*{description}" required>
+
+		<label for="dueDate">Data de Vencimento:</label>
+		<input type="text" id="dueDate" name="dueDate" th:field="*{dueDate}" required>
+
+		<label for="status">Status:</label>
+		<select id="status" name="status" th:field="*{status}" required>
+			<option value="PENDING">Pendente</option>
+			<option value="IN_PROGRESS">Em Andamento</option>
+			<option value="COMPLETED">Concluída</option>
+		</select>
+
+		<label for="priority">Prioridade:</label>
+		<select id="priority" name="priority" th:field="*{priority}" required>
+			<option value="LOW">Baixa</option>
+			<option value="MEDIUM">Média</option>
+			<option value="HIGH">Alta</option>
+		</select>
+
+		<label for="category">Categoria:</label>
+		<input type="text" id="category" name="category" th:field="*{category}" required>
+
+		<label for="assignee">Responsável:</label>
+		<input type="text" id="assignee" name="assignee" th:field="*{assignee}" required>
+
+
+		<button type="submit">Adicionar Tarefa</button>
+	</form>
+
+	<table border="1">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Descrição</th>
+				<th>Data de Vencimento</th>
+				<th>Status</th>
+				<th>Prioridade</th>
+				<th>Categoria</th>
+				<th>Responsável</th>
+				<th>Data de Criação</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="task : ${tasks}">
+				<td th:text="${task.id}"></td>
+				<td th:text="${task.description}"></td>
+				<td th:text="${task.dueDate}"></td>
+				<td th:text="${task.status}"></td>
+				<td th:text="${task.priority}"></td>
+				<td th:text="${task.category}"></td>
+				<td th:text="${task.assignee}"></td>
+				<td th:text="${task.creationDate}"></td>
+			</tr>
+		</tbody>
+	</table>
+
+</body>
+
+</html>

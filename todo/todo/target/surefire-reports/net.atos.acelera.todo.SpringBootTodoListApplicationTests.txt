@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: net.atos.acelera.todo.SpringBootTodoListApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.132 s - in net.atos.acelera.todo.SpringBootTodoListApplicationTests
