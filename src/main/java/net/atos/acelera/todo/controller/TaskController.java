@@ -30,16 +30,16 @@ public class TaskController {
 	}
 
 	@GetMapping("/view")
-    public String viewTasks(Model model) {
-        List<TaskModel> tasks = taskService.getAllTasks();
-        model.addAttribute("tasks", tasks);
+	public String viewTasks(Model model) {
+		List<TaskModel> tasks = taskService.getAllTasks();
+		model.addAttribute("tasks", tasks);
 
-        if (!model.containsAttribute("task")) {
-            model.addAttribute("task", new TaskModel());
-        }
+		if (!model.containsAttribute("task")) {
+			model.addAttribute("task", new TaskModel());
+		}
 
-        return "tasks";
-    }
+		return "tasks";
+	}
 
 	@GetMapping
 	public ResponseEntity<List<TaskModel>> getAllTasks() {
@@ -48,7 +48,7 @@ public class TaskController {
 	}
 
 	@GetMapping("/{taskId}")
-	public ResponseEntity<TaskModel> getTaskById(@PathVariable long taskId) {
+	public ResponseEntity<TaskModel> getTaskById(@PathVariable String taskId) {
 		return taskService.getTaskById(taskId).map(task -> new ResponseEntity<>(task, HttpStatus.OK))
 				.orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
@@ -67,28 +67,20 @@ public class TaskController {
 
 	@PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public String createTask(@ModelAttribute TaskModel task) {
-	    taskService.saveTask(task);
-	    return "redirect:/tasks/view"; 
+		taskService.saveTask(task);
+		return "redirect:/tasks/view";
 	}
 
-	@PutMapping("/{taskId}")
-	public ResponseEntity<TaskModel> updateTask(@PathVariable long taskId, @RequestBody TaskModel updatedTask) {
-		if (!taskService.getTaskById(taskId).isPresent()) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-
-		updatedTask.setId(taskId);
-		TaskModel savedTask = taskService.saveTask(updatedTask);
-		return new ResponseEntity<>(savedTask, HttpStatus.OK);
+	@PostMapping(value = "/update/{taskId}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+	public String updateTask(@PathVariable String taskId, @ModelAttribute TaskModel updatedTask) {
+		taskService.updateTask(taskId, updatedTask);
+		return "redirect:/tasks/view";
 	}
 
-	@DeleteMapping("/{taskId}")
-	public ResponseEntity<Void> deleteTask(@PathVariable long taskId) {
-		if (!taskService.getTaskById(taskId).isPresent()) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+	@GetMapping("/delete/{taskId}")
+	public String deleteTask(@PathVariable String taskId) {
 
 		taskService.deleteTaskById(taskId);
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		return "redirect:/tasks/view";
 	}
 }

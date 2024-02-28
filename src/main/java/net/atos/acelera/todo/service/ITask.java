@@ -9,14 +9,16 @@ public interface ITask {
 
 	List<TaskModel> getAllTasks();
 
-	Optional<TaskModel> getTaskById(long id);
+	Optional<TaskModel> getTaskById(String id);
 
 	TaskModel saveTask(TaskModel task);
 
-	void deleteTaskById(long id);
+	void deleteTaskById(String id);
 
 	List<TaskModel> getTasksByStatus(String status);
 
 	List<TaskModel> getTasksByPriority(String priority);
+
+	TaskModel updateTask(String taskId, TaskModel updatedTask);
 
 }

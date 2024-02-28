@@ -64,6 +64,12 @@
 				<td th:text="${task.category}"></td>
 				<td th:text="${task.assignee}"></td>
 				<td th:text="${task.creationDate}"></td>
+				<td>
+					<form th:action="@{'/tasks/delete/' + ${task.id}}" method="get">
+						<button type="submit">Excluir</button>
+					</form>
+				</td>
+
 			</tr>
 		</tbody>
 	</table>
