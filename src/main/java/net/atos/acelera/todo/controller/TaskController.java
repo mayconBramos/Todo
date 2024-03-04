@@ -47,12 +47,6 @@ public class TaskController {
 		return new ResponseEntity<>(tasks, HttpStatus.OK);
 	}
 
-	@GetMapping("/{taskId}")
-	public ResponseEntity<TaskModel> getTaskById(@PathVariable String taskId) {
-		return taskService.getTaskById(taskId).map(task -> new ResponseEntity<>(task, HttpStatus.OK))
-				.orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-	}
-
 	@GetMapping("/status/{status}")
 	public ResponseEntity<List<TaskModel>> getTasksByStatus(@PathVariable String status) {
 		List<TaskModel> tasks = taskService.getTasksByStatus(status);
@@ -71,16 +65,23 @@ public class TaskController {
 		return "redirect:/tasks/view";
 	}
 
-	@PostMapping(value = "/update/{taskId}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-	public String updateTask(@PathVariable String taskId, @ModelAttribute TaskModel updatedTask) {
-		taskService.updateTask(taskId, updatedTask);
-		return "redirect:/tasks/view";
-	}
-
 	@GetMapping("/delete/{taskId}")
 	public String deleteTask(@PathVariable String taskId) {
 
 		taskService.deleteTaskById(taskId);
 		return "redirect:/tasks/view";
 	}
+	
+	@PostMapping(value = "/update/{taskId}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public String updateTask(@PathVariable String taskId, @ModelAttribute TaskModel updatedTask) {
+        taskService.updateTask(taskId, updatedTask);
+        return "redirect:/tasks/view";
+    }
+
+    @GetMapping("/edit/{taskId}")
+    public String showEditForm(@PathVariable("taskId") String taskId, Model model) {
+        TaskModel task = taskService.getTaskById(taskId);
+        model.addAttribute("task", task);
+        return "edit-task"; // Nome do template HTML para o formulário de edição
+    }
 }

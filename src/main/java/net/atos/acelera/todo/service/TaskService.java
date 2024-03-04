@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import net.atos.acelera.todo.enums.Priority;
 import net.atos.acelera.todo.enums.Status;
@@ -30,8 +31,9 @@ public class TaskService implements ITask {
 	}
 
 	@Override
-	public Optional<TaskModel> getTaskById(String id) {
-		return taskRepository.findById(Long.valueOf(id));
+	public TaskModel getTaskById(String id) {
+		return taskRepository.findById(Long.valueOf(id))
+				.orElseThrow(() -> new EntityNotFoundException("Tarefa não encontrada com o ID: " + id));
 	}
 
 	@Override
@@ -40,27 +42,27 @@ public class TaskService implements ITask {
 		task.setCreationDate(LocalDateTime.now());
 		return taskRepository.save(task);
 	}
-	
+
 	@Override
 	public TaskModel updateTask(String taskId, TaskModel updatedTask) {
-		
-        Optional<TaskModel> existingTaskOptional = taskRepository.findById(Long.valueOf(taskId));
 
-        if (existingTaskOptional.isPresent()) {
-            TaskModel existingTask = existingTaskOptional.get();
+		Optional<TaskModel> existingTaskOptional = taskRepository.findById(Long.valueOf(taskId));
 
-            existingTask.setDescription(updatedTask.getDescription());
-            existingTask.setDueDate(updatedTask.getDueDate());
-            existingTask.setStatus(updatedTask.getStatus());
-            existingTask.setPriority(updatedTask.getPriority());
-            existingTask.setCategory(updatedTask.getCategory());
-            existingTask.setAssignee(updatedTask.getAssignee());
+		if (existingTaskOptional.isPresent()) {
+			TaskModel existingTask = existingTaskOptional.get();
 
-            return taskRepository.save(existingTask);
-        } else {
-            throw new RuntimeException("Tarefa não encontrada com ID: " + taskId);
-        }
-    }
+			existingTask.setDescription(updatedTask.getDescription());
+			existingTask.setDueDate(updatedTask.getDueDate());
+			existingTask.setStatus(updatedTask.getStatus());
+			existingTask.setPriority(updatedTask.getPriority());
+			existingTask.setCategory(updatedTask.getCategory());
+			existingTask.setAssignee(updatedTask.getAssignee());
+
+			return taskRepository.save(existingTask);
+		} else {
+			throw new RuntimeException("Tarefa não encontrada com ID: " + taskId);
+		}
+	}
 
 	@Override
 	public void deleteTaskById(String id) {

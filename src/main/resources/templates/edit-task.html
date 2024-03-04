@@ -3,14 +3,14 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>Lista de Tarefas</title>
+	<title>Editar Tarefa</title>
 </head>
 
 <body>
 
-	<h2>Lista de Tarefas</h2>
+	<h2>Editar Tarefa</h2>
 
-	<form th:action="@{/tasks}" method="post" th:object="${task}" class="form">
+	<form th:action="@{'/tasks/update/' + ${task.id}}" method="post" th:object="${task}" class="form">
 		<label for="description">Descrição:</label>
 		<input type="text" id="description" name="description" th:field="*{description}" required>
 
@@ -37,47 +37,8 @@
 		<label for="assignee">Responsável:</label>
 		<input type="text" id="assignee" name="assignee" th:field="*{assignee}" required>
 
-
-		<button type="submit">Adicionar Tarefa</button>
+		<button type="submit">Atualizar Tarefa</button>
 	</form>
-
-	<table border="1">
-		<thead>
-			<tr>
-				<th>ID</th>
-				<th>Descrição</th>
-				<th>Data de Vencimento</th>
-				<th>Status</th>
-				<th>Prioridade</th>
-				<th>Categoria</th>
-				<th>Responsável</th>
-				<th>Data de Criação</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr th:each="task : ${tasks}">
-				<td th:text="${task.id}"></td>
-				<td th:text="${task.description}"></td>
-				<td th:text="${task.dueDate}"></td>
-				<td th:text="${task.status}"></td>
-				<td th:text="${task.priority}"></td>
-				<td th:text="${task.category}"></td>
-				<td th:text="${task.assignee}"></td>
-				<td th:text="${task.creationDate}"></td>
-				<td>
-					<form th:action="@{'/tasks/delete/' + ${task.id}}" method="get">
-						<button type="submit">Excluir</button>
-					</form>
-				</td>
-				<td>
-					<form th:action="@{'/tasks/edit/' + ${task.id}}" method="get">
-						<button type="submit">Editar</button>
-					</form>
-				</td>
-
-			</tr>
-		</tbody>
-	</table>
 
 </body>
 
